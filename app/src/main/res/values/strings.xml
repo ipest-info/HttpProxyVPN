@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HTTP 代理</string>
+    <string name="notification_channel_name">代理服务</string>
+    <string name="notification_title">代理运行中</string>
+    <string name="notification_text">点击返回</string>
+    <string name="main_toggle">开启代理</string>
+    <string name="main_config">代理配置</string>
+    <string name="main_apps">选择应用</string>
+    <string name="config_title">代理配置</string>
+    <string name="config_type_http">HTTP 代理</string>
+    <string name="config_type_socks5">SOCKS5 代理</string>
+    <string name="config_host">代理地址</string>
+    <string name="config_port">端口</string>
+    <string name="config_username">用户名</string>
+    <string name="config_password">密码</string>
+    <string name="config_save">保存</string>
+    <string name="config_saved">已保存</string>
+    <string name="app_select_title">选择使用代理的应用</string>
+    <string name="app_select_hint">至少选择一项以启用按应用代理</string>
+    <string name="vpn_permission_required">需要 VPN 权限才能开启代理</string>
+    <string name="config_incomplete">请先完成代理配置（地址、端口）</string>
+</resources>
