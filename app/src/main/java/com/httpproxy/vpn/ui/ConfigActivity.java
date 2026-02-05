@@ -1,6 +1,7 @@
 package com.httpproxy.vpn.ui;
 
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.httpproxy.vpn.R;
+import com.httpproxy.vpn.data.ConfigFileReader;
 import com.httpproxy.vpn.data.ProxyPreferences;
 
 public class ConfigActivity extends AppCompatActivity {
@@ -22,6 +24,12 @@ public class ConfigActivity extends AppCompatActivity {
         setContentView(R.layout.activity_config);
         setTitle(R.string.config_title);
         prefs = new ProxyPreferences(this);
+
+        String[] paths = ConfigFileReader.getConfigPaths(this);
+        TextView tvHint = findViewById(R.id.tv_config_file_hint);
+        if (paths != null && paths.length > 0) {
+            tvHint.setText(getString(R.string.config_file_hint) + "\n" + paths[0]);
+        }
 
         etHost = findViewById(R.id.et_host);
         etPort = findViewById(R.id.et_port);

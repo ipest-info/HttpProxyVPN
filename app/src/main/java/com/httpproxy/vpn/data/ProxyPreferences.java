@@ -27,14 +27,21 @@ public class ProxyPreferences {
     private static final String DEFAULT_HOST = "";
 
     private final SharedPreferences prefs;
+    private final Context appContext;
 
     public ProxyPreferences(Context context) {
-        this.prefs = context.getApplicationContext()
-                .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        this.appContext = context.getApplicationContext();
+        this.prefs = appContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    private ConfigFileReader.ProxyConfig getFileProxyConfig() {
+        ConfigFileReader.ConfigResult r = ConfigFileReader.read(appContext);
+        return r != null && r.proxy != null ? r.proxy : null;
     }
 
     public String getProxyType() {
-        return prefs.getString(KEY_PROXY_TYPE, TYPE_HTTP);
+        ConfigFileReader.ProxyConfig fc = getFileProxyConfig();
+        return fc != null ? fc.type : prefs.getString(KEY_PROXY_TYPE, TYPE_HTTP);
     }
 
     public void setProxyType(String type) {
@@ -42,7 +49,8 @@ public class ProxyPreferences {
     }
 
     public String getHost() {
-        return prefs.getString(KEY_HOST, DEFAULT_HOST);
+        ConfigFileReader.ProxyConfig fc = getFileProxyConfig();
+        return fc != null ? fc.host : prefs.getString(KEY_HOST, DEFAULT_HOST);
     }
 
     public void setHost(String host) {
@@ -50,7 +58,8 @@ public class ProxyPreferences {
     }
 
     public int getPort() {
-        return prefs.getInt(KEY_PORT, DEFAULT_PORT);
+        ConfigFileReader.ProxyConfig fc = getFileProxyConfig();
+        return fc != null ? fc.port : prefs.getInt(KEY_PORT, DEFAULT_PORT);
     }
 
     public void setPort(int port) {
@@ -58,7 +67,8 @@ public class ProxyPreferences {
     }
 
     public String getUsername() {
-        return prefs.getString(KEY_USERNAME, "");
+        ConfigFileReader.ProxyConfig fc = getFileProxyConfig();
+        return fc != null ? fc.username : prefs.getString(KEY_USERNAME, "");
     }
 
     public void setUsername(String username) {
@@ -66,7 +76,8 @@ public class ProxyPreferences {
     }
 
     public String getPassword() {
-        return prefs.getString(KEY_PASSWORD, "");
+        ConfigFileReader.ProxyConfig fc = getFileProxyConfig();
+        return fc != null ? fc.password : prefs.getString(KEY_PASSWORD, "");
     }
 
     public void setPassword(String password) {

@@ -103,10 +103,13 @@ public class ProxyVpnService extends VpnService {
                 } catch (Exception ignored) { }
             }
         } else {
-            // 默认：除本应用外其他都走代理（仅排除本应用）
-            try {
-                builder.addDisallowedApplication(getPackageName());
-            } catch (Exception ignored) { }
+            // 默认：指定应用 + 浏览器 + 用户应用走代理（不含本应用）
+            Set<String> defaultPackages = DefaultProxyPackages.getDefaultPackages(this, getPackageName());
+            for (String pkg : defaultPackages) {
+                try {
+                    builder.addAllowedApplication(pkg);
+                } catch (Exception ignored) { }
+            }
         }
 
         vpnFd = builder.establish();

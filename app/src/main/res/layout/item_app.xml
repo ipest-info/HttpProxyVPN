@@ -12,15 +12,34 @@
         android:layout_height="40dp"
         android:contentDescription="@null" />
 
-    <TextView
-        android:id="@+id/label"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="12dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_system_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/badge_system"
+            android:padding="6dp"
+            android:text="@string/app_system_badge"
+            android:textColor="@color/badge_system_text"
+            android:textSize="11sp"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/check"

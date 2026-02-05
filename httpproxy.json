@@ -1,0 +1,16 @@
+{
+  "proxy": {
+    "type": "http",
+    "host": "localhost",
+    "port": 1087,
+    "username": "",
+    "password": ""
+  },
+  "defaultPackages": [
+    "com.android.chrome",
+    "com.tencent.mm",
+    "com.smile.gifmaker",
+    "com.ss.android.ugc.aweme",
+    "mark.via"
+  ]
+}

@@ -18,6 +18,9 @@
     <string name="config_saved">已保存</string>
     <string name="app_select_title">选择使用代理的应用</string>
     <string name="app_select_hint">至少选择一项以启用按应用代理</string>
+    <string name="app_search_hint">搜索应用名称或包名</string>
+    <string name="app_system_badge">系统</string>
     <string name="vpn_permission_required">需要 VPN 权限才能开启代理</string>
     <string name="config_incomplete">请先完成代理配置（地址、端口）</string>
+    <string name="config_file_hint">可将 httpproxy.json 放入 Download 或应用文件目录以从文件加载配置</string>
 </resources>

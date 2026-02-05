@@ -11,6 +11,18 @@
         android:text="@string/app_select_hint"
         android:textSize="14sp" />
 
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/app_search_hint"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:maxLines="1"
+        android:padding="12dp" />
+
     <ListView
         android:id="@+id/list_apps"
         android:layout_width="match_parent"

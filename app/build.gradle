@@ -7,6 +7,13 @@ android {
     compileSdk 34
     buildToolsVersion "34.0.0"
 
+    signingConfigs {
+        debug {
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     defaultConfig {
         applicationId "com.httpproxy.vpn"
         minSdk 21
