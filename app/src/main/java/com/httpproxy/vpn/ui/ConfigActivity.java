@@ -78,7 +78,20 @@ public class ConfigActivity extends AppCompatActivity {
         prefs.setProxyType(type);
         prefs.setUsername(username);
         prefs.setPassword(password);
-        Toast.makeText(this, R.string.config_saved, Toast.LENGTH_SHORT).show();
+
+        ConfigFileReader.ProxyConfig fileProxy = new ConfigFileReader.ProxyConfig();
+        fileProxy.type = type;
+        fileProxy.host = host;
+        fileProxy.port = port;
+        fileProxy.username = username;
+        fileProxy.password = password;
+        boolean fileSaved = ConfigFileReader.write(this, fileProxy);
+
+        if (fileSaved) {
+            Toast.makeText(this, R.string.config_saved, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "已保存到应用配置，写入文件失败", Toast.LENGTH_LONG).show();
+        }
         finish();
     }
 }

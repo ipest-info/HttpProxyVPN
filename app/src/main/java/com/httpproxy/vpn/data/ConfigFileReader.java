@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -70,6 +71,50 @@ public class ConfigFileReader {
         }
     }
 
+    /**
+     * 写入代理配置到配置文件。
+     * - 若文件已存在：写回同一路径，并保留 existing defaultPackages
+     * - 若文件不存在：写入应用私有目录 Android/data/.../files/httpproxy.json
+     */
+    public static boolean write(Context context, ProxyConfig proxy) {
+        if (context == null || proxy == null) return false;
+        File file = getWritableConfigFile(context);
+        if (file == null) return false;
+        try {
+            JSONObject root = new JSONObject();
+            if (file.exists() && file.canRead()) {
+                String existing = readFile(file);
+                if (existing != null && !existing.trim().isEmpty()) {
+                    root = new JSONObject(existing);
+                }
+            }
+
+            JSONObject proxyObj = new JSONObject();
+            proxyObj.put(KEY_TYPE, proxy.type == null ? ProxyPreferences.TYPE_HTTP : proxy.type);
+            proxyObj.put(KEY_HOST, proxy.host == null ? "" : proxy.host);
+            proxyObj.put(KEY_PORT, proxy.port);
+            proxyObj.put(KEY_USERNAME, proxy.username == null ? "" : proxy.username);
+            proxyObj.put(KEY_PASSWORD, proxy.password == null ? "" : proxy.password);
+            root.put(KEY_PROXY, proxyObj);
+
+            if (!root.has(KEY_DEFAULT_PACKAGES)) {
+                root.put(KEY_DEFAULT_PACKAGES, new JSONArray());
+            }
+
+            File parent = file.getParentFile();
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
+            try (FileOutputStream out = new FileOutputStream(file, false)) {
+                out.write(root.toString(2).getBytes(StandardCharsets.UTF_8));
+                out.flush();
+            }
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
     /** 获取配置文件的可能路径（用于提示用户） */
     public static String[] getConfigPaths(Context context) {
         List<String> paths = new ArrayList<>();
@@ -99,6 +144,23 @@ public class ConfigFileReader {
                     File f = new File(download, FILE_NAME);
                     if (f.exists() && f.canRead()) return f;
                 }
+            } catch (Exception ignored) { }
+        }
+        return null;
+    }
+
+    private static File getWritableConfigFile(Context context) {
+        File existing = findConfigFile(context);
+        if (existing != null) return existing;
+
+        File appFiles = context.getExternalFilesDir(null);
+        if (appFiles != null) {
+            return new File(appFiles, FILE_NAME);
+        }
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            try {
+                File download = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                if (download != null) return new File(download, FILE_NAME);
             } catch (Exception ignored) { }
         }
         return null;
