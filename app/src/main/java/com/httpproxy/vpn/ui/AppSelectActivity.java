@@ -25,8 +25,11 @@ import com.httpproxy.vpn.vpn.DefaultProxyPackages;
 import com.httpproxy.vpn.vpn.ProxyVpnService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class AppSelectActivity extends AppCompatActivity {
@@ -73,9 +76,10 @@ public class AppSelectActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(query)) {
             filteredList.addAll(appList);
         } else {
-            String q = query.toLowerCase().trim();
+            String q = query.toLowerCase(Locale.ROOT).trim();
             for (AppItem item : appList) {
-                if (item.label.toLowerCase().contains(q) || item.packageName.toLowerCase().contains(q)) {
+                if (item.label.toLowerCase(Locale.ROOT).contains(q)
+                        || item.packageName.toLowerCase(Locale.ROOT).contains(q)) {
                     filteredList.add(item);
                 }
             }
@@ -108,11 +112,14 @@ public class AppSelectActivity extends AppCompatActivity {
             appList.add(new AppItem(info.packageName, label.toString(), info, isSystem));
         }
         // 排序：已选中的应用 -> 用户应用 -> 系统应用；组内按名称
-        appList.sort((a, b) -> {
+        Collections.sort(appList, new Comparator<AppItem>() {
+            @Override
+            public int compare(AppItem a, AppItem b) {
             int orderA = selectedPackages.contains(a.packageName) ? 0 : (a.isSystem ? 2 : 1);
             int orderB = selectedPackages.contains(b.packageName) ? 0 : (b.isSystem ? 2 : 1);
             if (orderA != orderB) return orderA - orderB;
             return a.label.compareToIgnoreCase(b.label);
+            }
         });
     }
 

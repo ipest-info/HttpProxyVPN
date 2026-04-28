@@ -92,8 +92,10 @@ public class ProxyVpnService extends VpnService {
                 .setMtu(1500)
                 .addAddress("10.0.0.2", 32)
                 .addRoute("0.0.0.0", 0)
-                .addDnsServer("8.8.8.8")
-                .setHttpProxy(android.net.ProxyInfo.buildDirectProxy("127.0.0.1", localProxy.getPort()));
+                .addDnsServer("8.8.8.8");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            builder.setHttpProxy(android.net.ProxyInfo.buildDirectProxy("127.0.0.1", localProxy.getPort()));
+        }
 
         Set<String> allowed = prefs.getSelectedPackages();
         if (allowed != null && !allowed.isEmpty()) {
